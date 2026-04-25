@@ -5,7 +5,7 @@
 ![Pandas](https://img.shields.io/badge/Pandas-2.0+-green?logo=pandas)
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
-> **DEPI Final Project** — A machine learning-based recommendation system that suggests personalized movies to users based on historical ratings and movie metadata.
+> **DEPI Final Project** — End to end machine learning-based recommendation system that suggests personalized movies to users based on historical ratings and movie metadata.
 
 ---
 
