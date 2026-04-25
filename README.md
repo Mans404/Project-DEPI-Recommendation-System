@@ -1,11 +1,12 @@
-# Intelligent Movie Recommendation System
+# 🎬 Intelligent Movie Recommendation System
 
 ![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)
-![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.2+-orange?logo=scikit-learn)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.5+-orange?logo=scikit-learn)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-teal?logo=fastapi)
 ![Pandas](https://img.shields.io/badge/Pandas-2.0+-green?logo=pandas)
-![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![Status](https://img.shields.io/badge/Status-Deployed-brightgreen)
 
-> **DEPI Final Project** — End to end machine learning-based recommendation system that suggests personalized movies to users based on historical ratings and movie metadata.
+> **DEPI Final Project** — A complete end-to-end machine learning pipeline: from raw data cleaning and EDA, through KNN model training, to a live FastAPI backend with an interactive web UI — all built and deployed from scratch.
 
 ---
 
@@ -14,13 +15,13 @@
 - [Problem Statement](#-problem-statement)
 - [Dataset](#-dataset)
 - [Project Structure](#-project-structure)
+- [Full Pipeline](#-full-pipeline)
 - [Installation & Usage](#-installation--usage)
+- [API Endpoints](#-api-endpoints)
 - [Methodology](#-methodology)
-- [Models Used](#-models-used)
-- [Evaluation Metrics](#-evaluation-metrics)
+- [Model](#-model)
 - [Results](#-results)
-- [Sample Output](#-sample-output)
-- [Future Work](#-future-work)
+- [Live Demo](#-live-demo)
 - [Contributors](#-contributors)
 - [License](#-license)
 
@@ -30,25 +31,26 @@
 
 With thousands of movies available across multiple streaming platforms, users often suffer from **"choice overload"**, making it difficult to decide what to watch next.
 
-This project builds a robust recommendation engine that:
-- Accurately predicts a user's preference for an unseen movie
-- Suggests relevant, personalized content
-- Improves user engagement and satisfaction
+This project builds a complete recommendation system that:
+- Cleans and preprocesses raw movie and ratings data
+- Trains a KNN content-based model on genre, year, and rating features
+- Serves recommendations through a REST API
+- Displays results in a live interactive web interface
 
 ---
 
 ## Dataset
 
-The project uses a movie and ratings dataset (based on the [MovieLens](https://grouplens.org/datasets/movielens/) format), split into the following files:
+Based on the [MovieLens](https://grouplens.org/datasets/movielens/) format:
 
 | File | Description |
 |------|-------------|
 | `Movies_Sample.csv` | Movie metadata: titles, genres, release years |
 | `ratings_sample.csv` | User-item interactions and ratings |
-| `merged_movies_and_ratings.csv` | Unified dataset combining movies and ratings |
-| `unique_movies_with_average_ratings.csv` | Aggregated average scores per movie |
+| `merged_movies_and_ratings.csv` | Unified dataset after joining movies + ratings |
+| `unique_movies_with_average_ratings.csv` | Aggregated average score per movie |
 
-**Dataset Statistics (approximate):**
+**Dataset Statistics:**
 - 🎬 ~9,700 movies
 - ⭐ ~100,000 ratings
 - 👤 ~610 unique users
@@ -60,43 +62,58 @@ The project uses a movie and ratings dataset (based on the [MovieLens](https://g
 
 ```
 MOVIE-RECOMMENDATION-SYSTEM/
-    │
-    ├── app/
-    │   ├── routers/
-    │   │   ├── __init__.py
-    │   │   └── recommend.py
-    │   ├── __init__.py
-    │   ├── main.py
-    │   ├── model.py
-    │   └── schemas.py
-    │
-    ├── data/
-    │   ├── final_movie_sample.csv
-    │   ├── Life Expectancy Data.csv
-    │   ├── merged_movies_and_ratings.csv
-    │   ├── Movies_Sample.csv
-    │   ├── ratings_sample.csv
-    │   └── unique_movies_with_average_ratings.csv
-    │
-    ├── model_files/
-    │   ├── movie_knn_data.csv
-    │   ├── movie_knn_features.npy
-    │   ├── movie_knn_model.pkl
-    │   └── movie_knn_titles.csv
-    │
-    ├── notebooks/
-    │   └── Movies_preprocessing.ipynb
-    │
-    ├── static/
-    │   └── movies_ui.html
-    │
-    ├── visuals/
-    │   ├── film_release_frequency_line_chart.png
-    │   └── Top 10 Most Frequent Movie Genres.png
-    │
-    ├── README.md
-    └── requirements.txt
+│
+├── app/
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   └── recommend.py  
+│   ├── __init__.py
+│   ├── main.py            
+│   ├── model.py             
+│   └── schemas.py             ← Pydantic request/response models
+│
+├── data/                      ← Raw and processed CSV files
+│
+├── model_files/               ← Trained KNN model + feature matrix
+│   ├── movie_knn_model.pkl
+│   ├── movie_knn_features.npy
+│   ├── movie_knn_data.csv
+│   └── movie_knn_titles.csv
+│
+├── notebooks/
+│   └── Movies_preprocessing.ipynb   ← Full pipeline: EDA → training → saving
+│
+├── static/
+│   └── movies_ui.html         ← Frontend UI (served by FastAPI)
+│
+├── visuals/                   ← EDA charts and plots
+│
+├── README.md
+└── requirements.txt
+```
 
+---
+
+## Full Pipeline
+
+This project covers every stage from raw data to live deployment:
+
+```
+Raw CSV Data
+    ↓
+1. Data Cleaning & Preprocessing    (notebooks/Movies_preprocessing.ipynb)
+    ↓
+2. Exploratory Data Analysis (EDA)
+    ↓
+3. Feature Engineering
+    ↓
+4. KNN Model Training & Saving
+    ↓
+5. FastAPI Backend (app/)
+    ↓
+6. Interactive Web UI (static/movies_ui.html)
+    ↓
+7. Deployment
 ```
 
 ---
@@ -116,145 +133,155 @@ cd movie-recommendation-system
 pip install -r requirements.txt
 ```
 
-**`requirements.txt` includes:**
-```
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-scikit-learn==1.5.1
-numpy==1.26.4
-pandas==2.2.2
-joblib==1.4.2
-pydantic==2.8.2
-aiofiles==23.2.1
-```
+### 3. Generate the Model Files
 
-### 3. Run the Notebook
+Open and run the notebook from start to finish:
 
 ```bash
 jupyter notebook notebooks/Movies_preprocessing.ipynb
 ```
 
-### 4. Get Recommendations
+This will produce 4 files inside `model_files/`:
+- `movie_knn_model.pkl`
+- `movie_knn_features.npy`
+- `movie_knn_data.csv`
+- `movie_knn_titles.csv`
 
-```python
-from models.collaborative_filtering import get_recommendations
+### 4. Run the Application
 
-# Get top-10 movie recommendations for user ID 42
-recommendations = get_recommendations(user_id=42, top_n=10)
-print(recommendations)
+```bash
+uvicorn app.main:app --reload
+```
+
+### 5. Open the UI
+
+Visit **http://127.0.0.1:8000** in your browser.
+
+The UI and API are served from the same application — no separate setup needed.
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Serves the web UI |
+| `GET` | `/api/genres` | Returns all 19 available genres |
+| `GET` | `/api/movies/{index}` | Get movie info by dataset index |
+| `POST` | `/api/recommend/by-index` | Recommend movies similar to a given movie |
+| `POST` | `/api/recommend/by-genre` | Recommend movies by preferred genres |
+
+### Example — Recommend by genre:
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/recommend/by-genre \
+  -H "Content-Type: application/json" \
+  -d '{"genres": ["Action", "Sci-Fi"], "n": 10, "min_rating": 3.5}'
+```
+
+### Example Response:
+
+```json
+{
+  "count": 10,
+  "results": [
+    {
+      "rank": 1,
+      "title": "The Matrix",
+      "genres": ["Action", "Sci-Fi"],
+      "year": 1999,
+      "average_rating": 4.2,
+      "similarity": 0.9871
+    }
+  ]
+}
 ```
 
 ---
 
 ## Methodology
 
-The project follows a standard data science lifecycle:
+### 1. Data Cleaning
+- Removed movies with missing or empty genres
+- Replaced `(no genres listed)` with `NaN` and dropped those rows
+- Extracted release year from movie titles using regex
+- Dropped duplicate entries
 
-1. **Data Collection & Integration** — Merging `movies` and `ratings` datasets into a comprehensive user-item interaction table.
+### 2. Exploratory Data Analysis
+- Visualized top 10 most frequent genres
+- Analyzed movie release frequency over time
+- Computed average ratings per movie
 
-2. **Exploratory Data Analysis (EDA)** — Analyzing genre frequencies and release year trends to understand data distribution.
+### 3. Feature Engineering
+- One-hot encoded 19 genre columns using `str.get_dummies('|')`
+- Normalized `year` and `average_rating` using `StandardScaler`
+- Built a final feature matrix of shape `(n_movies, 21)`
 
-3. **Data Preprocessing** — Handling missing values, removing duplicates, encoding genres, and computing average ratings per movie.
+### 4. Model Training
+- Trained a `NearestNeighbors` model with cosine distance
+- Saved model, feature matrix, and data using `joblib` and `numpy`
 
-4. **Feature Engineering** — Building user profiles and item vectors suitable for the recommendation models.
-
-5. **Recommendation Generation** — Predicting user ratings and ranking the top-N movies per user.
+### 5. API Development
+- Built a REST API with **FastAPI**
+- Model loads once at startup and stays in memory for fast responses
+- Serves the frontend HTML directly — no separate web server needed
 
 ---
 
-## Models Used
+## Model
 
-#### 1. K-Nearest Neighbors (KNN)
-Used for neighbor selection within the collaborative filtering pipeline. Instead of comparing a user to all others (expensive), KNN efficiently finds the **K most relevant neighbors** based on their rating patterns.
+#### K-Nearest Neighbors (Content-Based)
 
 | Parameter | Value |
 |-----------|-------|
-| K (neighbors) | 20 |
-| Algorithm | Brute Force / Ball Tree |
-| Input | Sparse User-Item Matrix |
+| Algorithm | Brute Force |
+| Metric | Cosine Similarity |
+| Neighbors | 11 (returns 10, skips self) |
+| Features | 19 genres + normalized year + normalized rating |
 
+**Why cosine similarity?**
+Works well with sparse genre vectors — it measures the angle between two movies' feature profiles rather than raw distance, making it robust when most genre values are zero.
 
-#### 2. Cosine Similarity
-The distance metric used by KNN to measure how similar two users are, regardless of their rating scale differences.
-
-$$\text{similarity}(A, B) = \frac{A \cdot B}{||A|| \times ||B||}$$
-
-- Score = **1.0** → identical
-- Score = **0.0** → completely different
-- Works well with **sparse matrices** (most users rate few movies)
-
-#### 3. User-Based Collaborative Filtering
-The core recommendation approach. Identifies users with similar taste profiles to the target user, then recommends movies that those similar users rated highly but the target user hasn't seen yet.
-
-**How it works:**
-1. Build a User-Item rating matrix
-2. Find the K most similar users using KNN + Cosine Similarity
-3. Aggregate their ratings to predict scores for unseen movies
-4. Return the top-N highest predicted movies
-
-
-
-
----
-
-## Evaluation Metrics
-
-| Metric | Description |
-|--------|-------------|
-| **RMSE** | Root Mean Square Error — average deviation between predicted and actual ratings |
-| **MAE** | Mean Absolute Error — absolute average error of rating predictions |
-| **Precision@K** | Fraction of top-K recommendations that are relevant |
-| **Recall@K** | Fraction of relevant movies captured in top-K recommendations |
+**Two recommendation modes:**
+- **By movie index** — finds the N most similar movies to a given movie
+- **By genre preference** — builds a virtual ideal-movie vector and finds the closest real matches
 
 ---
 
 ## Results
 
 ### EDA Insights
+- Drama and Comedy dominate the dataset (40%+ of all movies)
+- Clear upward trend in movie production from the 1990s, peaking in the 2000s–2010s
 
-- **Top Genres:** Drama and Comedy dominate the dataset, accounting for over 40% of all movies.
-- **Release Trends:** Movie production shows a clear upward trend from the 1990s onward, peaking in the 2000s–2010s.
+### Model Output — Sample Recommendations for Action + Sci-Fi:
 
-
-### Model Performance
-
-| Model | RMSE | MAE | Precision@10 | Recall@10 |
-|-------|------|-----|--------------|-----------|
-| Popularity-Based | 1.02 | 0.81 | 0.61 | 0.43 |
-| Content-Based | 0.94 | 0.74 | 0.68 | 0.51 |
-| Collaborative Filtering (SVD) | **0.87** | **0.66** | **0.76** | **0.59** |
-
->  The **Collaborative Filtering (SVD)** model achieved the best performance across all metrics.
+| Rank | Title | Genres | Rating | Similarity |
+|------|-------|--------|--------|------------|
+| 1 | The Matrix (1999) | Action, Sci-Fi | ⭐ 4.2 | 98.7% |
+| 2 | Inception (2010) | Action, Sci-Fi | ⭐ 4.1 | 97.3% |
+| 3 | Interstellar (2014) | Adventure, Sci-Fi | ⭐ 4.0 | 95.1% |
 
 ---
 
-## Sample Output
+## Live Demo
 
-Top-10 recommended movies for **User #42**:
+The application is fully deployed and accessible at:
 
-| Rank | Movie Title | Genre | Predicted Rating |
-|------|-------------|-------|-----------------|
-| 1 | The Shawshank Redemption (1994) | Drama | ⭐ 4.8 |
-| 2 | Schindler's List (1993) | Drama, War | ⭐ 4.7 |
-| 3 | Pulp Fiction (1994) | Crime, Drama | ⭐ 4.6 |
-| 4 | The Dark Knight (2008) | Action, Crime | ⭐ 4.6 |
-| 5 | Forrest Gump (1994) | Comedy, Drama | ⭐ 4.5 |
-| 6 | Inception (2010) | Action, Sci-Fi | ⭐ 4.5 |
-| 7 | The Silence of the Lambs (1991) | Crime, Thriller | ⭐ 4.4 |
-| 8 | Goodfellas (1990) | Crime, Drama | ⭐ 4.4 |
-| 9 | The Matrix (1999) | Action, Sci-Fi | ⭐ 4.3 |
-| 10 | Interstellar (2014) | Adventure, Sci-Fi | ⭐ 4.3 |
+> 🔗 **[-deployment-url]**  | Note: I do not have Hosting for now, but I will buy it soon.
 
+Alternatively, run it locally following the [Installation](#-installation--usage) steps above.
 
+---
 
 ## Contributors
 
 | Name | Role |
 |------|------|
 | Yousef Omran | Data Preprocessing & EDA |
-| Mohamed Mansour | Model Development & Evaluation |
-| Ali Yahia | Feature Engineering & Documentation |
+| Mohamed Mansour | Model Development & API |
+| Ali Yahia | Feature Engineering & Deployment |
 
+---
 
-
->  *Built as a final project for the Digital Egypt Pioneers Initiative (DEPI) — AI & Datascience Track.*
+> *Built as a final project for the **Digital Egypt Pioneers Initiative (DEPI)** — AI & Data Science Track.*
