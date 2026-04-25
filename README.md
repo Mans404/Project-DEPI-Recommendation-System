@@ -59,28 +59,44 @@ The project uses a movie and ratings dataset (based on the [MovieLens](https://g
 ## Project Structure
 
 ```
-movie-recommendation-system/
-│
-├── data/
-│   ├── Movies_Sample.csv
-│   ├── ratings_sample.csv
-│   ├── merged_movies_and_ratings.csv
-│   └── unique_movies_with_average_ratings.csv
-│
-├── notebooks/
-│   └── Movies_preprocessing.ipynb
-│
-├── visuals/
-│   ├── Top 10 Most Frequent Movie Genres.png
-│   └── film_release_frequency_line_chart.png
-│
-├── models/
-│   ├── collaborative_filtering.py
-│   ├── content_based.py
-│   └── popularity_based.py
-│
-├── requirements.txt
-└── README.md
+MOVIE-RECOMMENDATION-SYSTEM/
+    │
+    ├── app/
+    │   ├── routers/
+    │   │   ├── __init__.py
+    │   │   └── recommend.py
+    │   ├── __init__.py
+    │   ├── main.py
+    │   ├── model.py
+    │   └── schemas.py
+    │
+    ├── data/
+    │   ├── final_movie_sample.csv
+    │   ├── Life Expectancy Data.csv
+    │   ├── merged_movies_and_ratings.csv
+    │   ├── Movies_Sample.csv
+    │   ├── ratings_sample.csv
+    │   └── unique_movies_with_average_ratings.csv
+    │
+    ├── model_files/
+    │   ├── movie_knn_data.csv
+    │   ├── movie_knn_features.npy
+    │   ├── movie_knn_model.pkl
+    │   └── movie_knn_titles.csv
+    │
+    ├── notebooks/
+    │   └── Movies_preprocessing.ipynb
+    │
+    ├── static/
+    │   └── movies_ui.html
+    │
+    ├── visuals/
+    │   ├── film_release_frequency_line_chart.png
+    │   └── Top 10 Most Frequent Movie Genres.png
+    │
+    ├── README.md
+    └── requirements.txt
+
 ```
 
 ---
