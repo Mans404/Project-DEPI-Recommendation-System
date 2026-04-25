@@ -102,13 +102,14 @@ pip install -r requirements.txt
 
 **`requirements.txt` includes:**
 ```
-pandas==2.0.3
-numpy==1.24.3
-scikit-learn==1.3.0
-scipy==1.11.1
-matplotlib==3.7.2
-seaborn==0.12.2
-jupyter==1.0.0
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+scikit-learn==1.5.1
+numpy==1.26.4
+pandas==2.2.2
+joblib==1.4.2
+pydantic==2.8.2
+aiofiles==23.2.1
 ```
 
 ### 3. Run the Notebook
